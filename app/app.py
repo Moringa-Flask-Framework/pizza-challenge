@@ -2,8 +2,9 @@
 
 from flask import Flask, make_response
 from flask_migrate import Migrate
+from flask_restful import Api, Resource
 
-from models import db, Restaurant
+from models import db, Restaurant,Pizza,Restaurant_pizza
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
@@ -16,6 +17,11 @@ db.init_app(app)
 @app.route('/')
 def home():
     return ''
+
+class Restaurants(Resource):
+    def get(self):
+        all_restaurant= Restaurant.query.all()
+        
 
 
 if __name__ == '__main__':
