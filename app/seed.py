@@ -1,4 +1,5 @@
-from random import choice, choices, sample, randint
+# from random import choice, choices, sample, randint
+import random
 import faker
 
 from models import Restaurant,Restaurant_pizza,Pizza, db
@@ -36,9 +37,9 @@ with app.app_context():
     fake_pizzas= []
 
     for x in range(len(pizzas)):
-        other_pizza = choices(sample_ingredients , k=3)
+        other_pizza = random.choices(sample_ingredients , k=3)
         random_ingedients= ','.join(str(ing) for ing in other_pizza)
-        fake_pizza= Pizza(name= choice(pizzas), ingredients= random_ingedients)
+        fake_pizza= Pizza(name= random.choice(pizzas), ingredients= random_ingedients)
         fake_pizzas.append(fake_pizza)
 
     print(fake_pizzas)
@@ -46,9 +47,9 @@ with app.app_context():
     db.session.commit()
 
     for record in range(20):
-        rnd_rest=choice([x.id for x in Restaurant.query.all()])
-        rnd_pizza= choice([p.id for p in  Pizza.query.all()])
-        db.session.add(Restaurant_pizza(restaurant_id=rnd_rest, pizza_id=rnd_pizza, price= randint(1,30)))
+        rnd_rest=random.choice([x.id for x in Restaurant.query.all()])
+        rnd_pizza= random.choice([p.id for p in  Pizza.query.all()])
+        db.session.add(Restaurant_pizza(restaurant_id=rnd_rest, pizza_id=rnd_pizza, price= random.randint(1,30)))
         db.session.commit()
 
     print("++++++++++++++++++++++++++++++++++++")
