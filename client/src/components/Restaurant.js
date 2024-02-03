@@ -38,6 +38,7 @@ function Home() {
       status: "resolved",
     });
     alert('Successifully saved')
+    window.location.reload();
   }
 
   if (status === "pending") return <h1>Loading...</h1>;
