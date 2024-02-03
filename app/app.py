@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask, make_response, jsonify
+from flask import Flask, make_response, request, jsonify
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from werkzeug.exceptions import NotFound
@@ -61,12 +61,41 @@ class Pizz(Resource):
             response= make_response(jsonify(response_dict), 200)
             return response
     
+class RestaurantPizzas(Resource):
+        def post(self):
+            try:
+                data= request.get_json()
+                price= data.get('price')
+                pizza_id= data.get('pizza_id')
+                restaurant_id=  data.get('restaurant_id')
 
+                pizza= Pizza.query.get(pizza_id)
+                restaurant=  Restaurant.query.get(restaurant_id)
+
+                if not pizza and restaurant:
+                    return make_response(jsonify({"message":["Pizza and Restaurant does not exist"]}),404)
+                
+                if not 1<= price <=30:
+                    return make_response(jsonify({"Error": ['validation error']}))
+                else:
+                    new_pizza= Restaurant_pizza(price=price, pizza_id=pizza_id,  restaurant_id=restaurant_id )
+                    db.session.add(new_pizza)
+                    db.session.commit()
+
+                return make_response(jsonify(new_pizza.to_dict()), 201)
+            
+            except:
+                err_dict= {"errors" : ["validation errors"]}
+                response= make_response(err_dict, 404)
+                db.session.rollback()
+                return response
+        
 
 #Api routes
 api.add_resource(Restaurants, '/restaurants')
 api.add_resource(Pizz, '/pizzas')
 api.add_resource(RestaurantById, '/restaurants/<int:id>')
+api.add_resource(RestaurantPizzas, '/restaurant_pizzas')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
