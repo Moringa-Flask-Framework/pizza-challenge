@@ -17,6 +17,11 @@ migrate = Migrate(app, db)
 db.init_app(app)
 api= Api(app)
 
+@app.errorhandler(NotFound)
+def handle_not_found(e):
+    response= make_response("NotFound: The requested resource not found", 404)
+    return response
+
 @app.route('/')
 def home():
     return 'Hello'
@@ -27,8 +32,20 @@ class Restaurants(Resource):
         response= make_response(jsonify(response_dict), 200)
         return  response
 
+class Pizz(Resource):
+    def get(self):
+        response_dict= [n.to_dict() for n in Pizza.query.all()]
+        if len(response_dict)==0:
+            response= make_response("Record not found", 404)
+            return response
+        else :
+            response= make_response(jsonify(response_dict), 200)
+            return response
+
+
 #Api routes
 api.add_resource(Restaurants, '/restaurants')
+api.add_resource(Pizz, '/pizzas')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

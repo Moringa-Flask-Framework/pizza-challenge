@@ -7,6 +7,8 @@ db = SQLAlchemy()
 class Restaurant(db.Model,  SerializerMixin):
     __tablename__ = 'restaurants'
 
+    serialize_rules= ('-restaurants_pizzas.restaurant',)
+
     id = db.Column(db.Integer, primary_key=True)
     name=  db.Column(db.String(100), nullable=False)
     address = db.Column(db.String(256))
@@ -19,6 +21,8 @@ class Restaurant(db.Model,  SerializerMixin):
 class Pizza(db.Model,  SerializerMixin):
     __tablename__= 'pizzas'
     
+    serialize_rules= ('-restaurants_pizzas.pizza',)
+
     id=  db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     ingredients= db.Column(db.String(), nullable=False)
@@ -32,6 +36,8 @@ class Pizza(db.Model,  SerializerMixin):
     
 class Restaurant_pizza(db.Model, SerializerMixin):
     __tablename__='restaurant_pizzas'
+
+    serialize_rules= ('-pizza.restaurant_pizzas', '-restaurant.restaurant_pizzas')
     
     id=  db.Column(db.Integer, primary_key=True)
     pizza_id= db.Column(db.Integer, db.ForeignKey('pizzas.id'), nullable=False)
@@ -41,9 +47,9 @@ class Restaurant_pizza(db.Model, SerializerMixin):
     updated_at=  db.Column(db.DateTime, onupdate=db.func.now())
     
     def __repr__(self):
-        return f'Price: Ksh{self.price}'
+         return f'Pizza: {self.pizza_id}, Price: Ksh{self.price}'
     
-    @validates
+    @validates('price')
     def validate_price(self, key, price):
         if price is None and price < 1 and price > 30:
             raise ValueError ("Price must be between 1 and 30")
