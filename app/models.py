@@ -14,6 +14,9 @@ class Restaurant(db.Model,  SerializerMixin):
     address = db.Column(db.String(256))
     
     restaurant_pizzas=  db.relationship('Restaurant_pizza', backref='restaurant')
+
+    # def serialize(self):
+    #     return {"id": self.id , "name": self.name, "address": self.address}
     
     def __repr__(self):
         return f"Restaurant {self.name} Address: {self.address}"
@@ -30,6 +33,9 @@ class Pizza(db.Model,  SerializerMixin):
     updated_at=  db.Column(db.DateTime, onupdate=db.func.now())
     
     restaurant_pizzas=  db.relationship('Restaurant_pizza', backref='pizza')
+
+    # def serialize(self):
+    #     return {"id": self.id , "name": self.name, "ingredients": self.ingredients}
     
     def __repr__(self):
         return f"Pizza {self.name}"
@@ -52,6 +58,9 @@ class Restaurant_pizza(db.Model, SerializerMixin):
             raise ValueError ("Price must be between 1 and 30")
         return  value 
     
+    # def serialize(self):
+    #     return {"id": self.id , "pizza": self.pizza_id, "restaurant": {self.restaurant_id} ,"price": self.price}
+
     def __repr__(self):
          return f'Pizza: {self.pizza_id}, Price: Ksh{self.price}'
     

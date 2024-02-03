@@ -10,6 +10,8 @@ function Home() {
   });
   const { id } = useParams();
 
+  
+
   useEffect(() => {
     fetch(`/restaurants/${id}`).then((r) => {
       if (r.ok) {
@@ -24,15 +26,18 @@ function Home() {
     });
   }, [id]);
 
+  console.log(restaurant)
+
   function handleAddPizza(newPizza) {
     setRestaurant({
       data: {
         ...restaurant,
-        pizzas: [...restaurant.pizzas, newPizza],
+        pizzas: [...restaurant.restaurant_pizzas, newPizza],
       },
       error: null,
       status: "resolved",
     });
+    alert('Successifully saved')
   }
 
   if (status === "pending") return <h1>Loading...</h1>;
@@ -46,11 +51,11 @@ function Home() {
       </div>
       <div className="card">
         <h2>Pizza Menu</h2>
-        {restaurant.pizzas.map((pizza) => (
+        {restaurant.restaurant_pizzas.map((pizza) => (
           <div key={pizza.id}>
-            <h3>{pizza.name}</h3>
+            <h3>{pizza.pizza.name}</h3>
             <p>
-              <em>{pizza.ingredients}</em>
+              <em>{pizza.pizza.ingredients}</em>
             </p>
           </div>
         ))}

@@ -34,7 +34,7 @@ class Restaurants(Resource):
 
 class RestaurantById(Resource):
     def get(self, id):
-        record= Restaurant.query.get(id)
+        record= Restaurant.query.filter_by(id=id).first()
         if record is None:
             response= make_response(jsonify({'error':'Restaurant not found'}),404)
             return response
@@ -50,6 +50,8 @@ class RestaurantById(Resource):
             return response
         db.session.delete(restaurant)
         db.session.commit()
+
+    
 
 class Pizz(Resource):
     def get(self):
