@@ -17,7 +17,7 @@ with app.app_context():
 
     print("++++++++++++++++++++++++++++++++++++")
     print("Creating data...")
-    for n in range(50):
+    for n in range(20):
         fake_name=  fake.name()
         address= fake.address()
 
