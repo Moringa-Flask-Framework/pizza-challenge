@@ -32,20 +32,41 @@ class Restaurants(Resource):
         response= make_response(jsonify(response_dict), 200)
         return  response
 
+class RestaurantById(Resource):
+    def get(self, id):
+        record= Restaurant.query.get(id)
+        if record is None:
+            response= make_response(jsonify({'error':'Restaurant not found'}),404)
+            return response
+        else:
+            record_dict= record.to_dict()
+            response = make_response(record_dict, 200)
+            return response
+        
+    def delete(self, id):
+        restaurant = Restaurant.query.filter_by(id=id).first()
+        if restaurant is None:
+            response= make_response(jsonify({'error':'Restaurant not found'}),404)
+            return response
+        db.session.delete(restaurant)
+        db.session.commit()
+
 class Pizz(Resource):
     def get(self):
         response_dict= [n.to_dict() for n in Pizza.query.all()]
         if len(response_dict)==0:
-            response= make_response("Record not found", 404)
+            response= make_response("Restaurant not found", 404)
             return response
         else :
             response= make_response(jsonify(response_dict), 200)
             return response
+    
 
 
 #Api routes
 api.add_resource(Restaurants, '/restaurants')
 api.add_resource(Pizz, '/pizzas')
+api.add_resource(RestaurantById, '/restaurants/<int:id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
