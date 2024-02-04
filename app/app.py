@@ -9,8 +9,8 @@ from werkzeug.exceptions import NotFound
 from models import db, Restaurant,Pizza,Restaurant_pizza
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pizza_app_db_user:c1abirEhdcGjwzKpGQc90RtEoCCKD8aP@dpg-cmv7eh7109ks73b9gpd0-a.oregon-postgres.render.com:5432/pizza_app_db'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pizza_app_db_user:c1abirEhdcGjwzKpGQc90RtEoCCKD8aP@dpg-cmv7eh7109ks73b9gpd0-a.oregon-postgres.render.com:5432/pizza_app_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 #postgres://pizza_app_229o_user:U8NjkpdxLQwwAUtGhN20NO2Z9vOMSgpH@dpg-cmv6sv7109ks73b9ckb0-a.oregon-postgres.render.com/pizza_app_229o
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
